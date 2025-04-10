@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather-Based Outfit Picker</title>
+</head>
+<body>
+    <h1>Outfit Picker Based on Weather</h1>
+    <form id="location-form">
+        <label for="location">Enter your location:</label>
+        <input type="text" id="location" name="location" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="results">
+        <h2>Results</h2>
+        <p id="weather"></p>
+        <p id="outfit"></p>
+        <div id="shopping-links"></div>
+    </div>
+
+    <script>
+        document.getElementById('location-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const location = document.getElementById('location').value;
+            const response = await fetch('http://localhost:5000/query', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ location })
+            });
+            const data = await response.json();
+
+            document.getElementById('weather').textContent = `Weather: ${data.weather}`;
+            document.getElementById('outfit').textContent = `Recommended Outfit: ${data.outfit}`;
+
+            const linksContainer = document.getElementById('shopping-links');
+            linksContainer.innerHTML = '<h3>Shopping Links:</h3>';
+            data.shopping_links.forEach(link => {
+                const a = document.createElement('a');
+                a.href = link;
+                a.textContent = link;
+                a.target = '_blank';
+                linksContainer.appendChild(a);
+                linksContainer.appendChild(document.createElement('br'));
+            });
+        });
+    </script>
+</body>
+</html>
