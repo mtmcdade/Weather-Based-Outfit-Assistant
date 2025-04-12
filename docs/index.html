@@ -207,6 +207,7 @@
   </div>
   
   <button onclick="getOutfit()">Get Outfit</button>
+  <button onclick="testAPIConnection()" style="background-color: #ff9900; margin-left: 10px;">Test API Connection</button>
   
   <div class="gender-toggle">
     <button id="male-toggle" class="gender-btn active" onclick="setGender('male')">Men's Style</button>
@@ -232,12 +233,27 @@
   </div>
   
   <script>
-    // Replace this with your Google Apps Script Web App URL
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxybzH-mEz5AW4DLq40lIesyiLBu-Vs9Xb9fVM0bewFxJUiXUkWT-VaB9vwRrFnN8u6pQ/exec";
+    // Replace this with your Google Apps Script Web App URL - IMPORTANT!
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqtgeMw7N9_ZAokpAfVGkuf9WCbkzbXU95YiLNDW-YFJUOP_5Ree2mBmMEhBNlT7_pfQ/exec";
     
     let citySuggestions = [];
     let currentGender = "male"; // Default gender
     let lastApiResponse = null; // Store last API response for debugging
+    
+    // Test API connection function
+    async function testAPIConnection() {
+      try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: 'GET',
+          mode: 'cors'
+        });
+        const text = await response.text();
+        alert("Connection successful! Response: " + text);
+      } catch (error) {
+        alert("Connection failed: " + error.message);
+        console.error("Connection error details:", error);
+      }
+    }
     
     // Set active gender
     function setGender(gender) {
@@ -284,6 +300,7 @@
       try {
         const response = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
+          mode: 'cors',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -392,6 +409,7 @@
         // Get weather data from Apps Script
         const weatherResponse = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
+          mode: 'cors',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -428,6 +446,7 @@
         // Get outfit recommendation from Apps Script
         const outfitResponse = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
+          mode: 'cors',
           headers: {
             'Content-Type': 'application/json',
           },
