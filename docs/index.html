@@ -232,7 +232,7 @@
   </div>
   
   <script>
-    // Replace with your Google Apps Script URL
+    // Your Google Apps Script URL
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbyd0aYRNbhYK-JfhU3n47dnL6hhRCDR4e_quSY1oWXiVZJwfuFHjqVNWwHlNRSO3SeLuA/exec";
     
     let citySuggestions = [];
@@ -282,9 +282,22 @@
       }
       
       try {
+        console.log("Fetching city suggestions for:", cityInput);
         // Call our Google Apps Script backend instead of directly calling OpenWeather
         const response = await fetch(`${GAS_API_URL}?action=getCitySuggestions&cityInput=${encodeURIComponent(cityInput)}`);
-        const data = await response.json();
+        console.log("Suggestions response status:", response.status);
+        
+        const responseText = await response.text();
+        console.log("Suggestions response text:", responseText);
+        
+        let data;
+        try {
+          data = JSON.parse(responseText);
+        } catch (parseError) {
+          console.error("Failed to parse suggestions response:", parseError);
+          suggestionsDiv.style.display = "none";
+          return;
+        }
         
         // Handle potential error in response
         if (data.error) {
@@ -387,23 +400,37 @@
       loadingContainer.style.display = "block";
       
       try {
-        // Step 1: Get weather data from our backend
+        console.log("Fetching weather for:", city);
+        // Step 1: Get weather data with more detailed logging
         const weatherResponse = await fetch(GAS_API_URL, {
           method: 'POST',
+          mode: 'cors', // Explicitly request CORS
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json'
           },
           body: JSON.stringify({
             action: 'getWeather',
             city: city
           })
+        }).catch(error => {
+          console.error("Fetch error details:", error);
+          throw error;
         });
         
-        if (!weatherResponse.ok) {
-          throw new Error(`HTTP error! Status: ${weatherResponse.status}`);
-        }
+        console.log("Weather response status:", weatherResponse.status);
+        // Get the raw text first for debugging
+        const weatherText = await weatherResponse.text();
+        console.log("Weather response text:", weatherText);
         
-        const weatherData = await weatherResponse.json();
+        // Parse the JSON manually
+        let weatherData;
+        try {
+          weatherData = JSON.parse(weatherText);
+        } catch (parseError) {
+          console.error("Failed to parse weather response:", parseError);
+          throw new Error("Invalid response from weather service");
+        }
         
         if (weatherData.error) {
           throw new Error(weatherData.error);
@@ -427,68 +454,36 @@
         `;
         
         // Step 2: Get outfit recommendation from our backend
+        console.log("Fetching outfit recommendation for:", currentGender);
         const outfitResponse = await fetch(GAS_API_URL, {
           method: 'POST',
+          mode: 'cors',
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json'
           },
           body: JSON.stringify({
             action: 'getOutfit',
             weatherData: weatherData,
             gender: currentGender
           })
+        }).catch(error => {
+          console.error("Outfit fetch error details:", error);
+          throw error;
         });
         
-        if (!outfitResponse.ok) {
-          throw new Error(`HTTP error! Status: ${outfitResponse.status}`);
+        console.log("Outfit response status:", outfitResponse.status);
+        const outfitText = await outfitResponse.text();
+        console.log("Outfit response text:", outfitText);
+        
+        let outfitRecommendation;
+        try {
+          outfitRecommendation = JSON.parse(outfitText);
+        } catch (parseError) {
+          console.error("Failed to parse outfit response:", parseError);
+          throw new Error("Invalid response from outfit service");
         }
         
-        const outfitRecommendation = await outfitResponse.json();
         lastApiResponse = outfitRecommendation; // Store for debugging
         
-        if (outfitRecommendation.error) {
-          throw new Error(outfitRecommendation.error);
-        }
-        
-        loadingContainer.style.display = "none";
-        resultDiv.innerHTML = `<strong>Your personalized outfit for ${cityName} (${temp}°F, ${condition}):</strong>`;
-        
-        // Display outfit items with Amazon links
-        outfitItemsDiv.innerHTML = `
-          <div class="item">
-            <h3>SHIRT: ${outfitRecommendation.shirt.name}</h3>
-            <p>${outfitRecommendation.shirt.description}</p>
-            <a href="https://www.amazon.com/s?k=${encodeURIComponent(outfitRecommendation.shirt.name)}" target="_blank">Shop on Amazon</a>
-          </div>
-          <div class="item">
-            <h3>PANTS: ${outfitRecommendation.pants.name}</h3>
-            <p>${outfitRecommendation.pants.description}</p>
-            <a href="https://www.amazon.com/s?k=${encodeURIComponent(outfitRecommendation.pants.name)}" target="_blank">Shop on Amazon</a>
-          </div>
-          <div class="item">
-            <h3>SHOES: ${outfitRecommendation.shoes.name}</h3>
-            <p>${outfitRecommendation.shoes.description}</p>
-            <a href="https://www.amazon.com/s?k=${encodeURIComponent(outfitRecommendation.shoes.name)}" target="_blank">Shop on Amazon</a>
-          </div>
-          <div class="item">
-            <h3>ACCESSORY: ${outfitRecommendation.accessory.name}</h3>
-            <p>${outfitRecommendation.accessory.description}</p>
-            <a href="https://www.amazon.com/s?k=${encodeURIComponent(outfitRecommendation.accessory.name)}" target="_blank">Shop on Amazon</a>
-          </div>
-        `;
-        
-        // Step 3: Generate the outfit image using Pollinations.ai
-        generateOutfitImage(outfitRecommendation.imagePrompt);
-        
-      } catch (err) {
-        console.error("Error:", err);
-        loadingContainer.style.display = "none";
-        resultDiv.innerHTML = `<p class="error">Something went wrong: ${err.message}</p>
-                              <p>Check browser console for more details or click "Debug" below.</p>
-                              <button onclick="document.getElementById('debug-info').style.display='block'">Debug</button>`;
-        displayDebugInfo(err, lastApiResponse);
-      }
-    }
-  </script>
-</body>
-</html>
+        if (outfitRecommendation.erro
