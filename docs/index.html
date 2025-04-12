@@ -1,1 +1,445 @@
-https://script.google.com/macros/s/AKfycbxpGbQ0ya2d-jRCk80vDkt0_1FPC-o7KKLB8rkESht2ZymqxV64tEBFgrOlZt10Ylus/exec
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Slay-gent: Weather-Based Outfit Agent ☀️❄️👗</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      padding: 20px; 
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    input, button, select { 
+      font-size: 1rem; 
+      padding: 8px; 
+      margin-right: 5px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(0,0,0,.3);
+      border-radius: 50%;
+      border-top-color: #000;
+      animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    #weather-info {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border-radius: 5px;
+    }
+    #city-container {
+      position: relative;
+      display: inline-block;
+      width: 300px;
+    }
+    #city-suggestions {
+      position: absolute;
+      width: 100%;
+      max-height: 200px;
+      overflow-y: auto;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-top: none;
+      z-index: 100;
+      display: none;
+    }
+    .city-suggestion {
+      padding: 10px;
+      cursor: pointer;
+    }
+    .city-suggestion:hover {
+      background-color: #f1f1f1;
+    }
+    .gender-toggle {
+      margin-top: 10px;
+      margin-bottom: 15px;
+    }
+    .gender-btn {
+      background-color: #f0f0f0;
+      color: #333;
+      border: 1px solid #ccc;
+      padding: 8px 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .gender-btn.active {
+      background-color: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+    }
+    .outfit-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .outfit-image {
+      flex: 1;
+      min-width: 300px;
+    }
+    .outfit-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-height: 400px;
+      object-fit: cover;
+    }
+    .outfit-items {
+      flex: 1;
+      min-width: 300px;
+    }
+    .item {
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      background-color: #fafafa;
+    }
+    .item h3 {
+      margin-top: 0;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+      color: #333;
+    }
+    .item a {
+      display: inline-block;
+      background-color: #ff9900;
+      color: white;
+      padding: 5px 10px;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+    .item a:hover {
+      background-color: #e68a00;
+    }
+    .placeholder-img {
+      background-color: #f0f0f0;
+      width: 100%;
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 8px;
+      color: #555;
+    }
+    .credits {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 40px;
+      text-align: center;
+    }
+    .slay-logo {
+      font-size: 2rem;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    #loading-container {
+      display: none;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .loader {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #4CAF50;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+      margin-bottom: 15px;
+    }
+    #debug-info {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f8f8f8;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      display: none;
+    }
+    details summary {
+      cursor: pointer;
+      padding: 5px;
+      background-color: #eee;
+      border-radius: 4px;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-break: break-all;
+      background-color: #f1f1f1;
+      padding: 10px;
+      border-radius: 4px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1><span class="slay-logo">☀️❄️👗</span>Slay-gent: Weather-Based Outfit Assistant</h1>
+  <p>Enter your city to get an AI-powered outfit recommendation tailored to the current weather, always keeping it classy and cute!</p>
+  
+  <div id="city-container">
+    <input type="text" id="city" placeholder="Enter city" autocomplete="off">
+    <div id="city-suggestions"></div>
+  </div>
+  
+  <button onclick="getOutfit()">Get Outfit</button>
+  
+  <div class="gender-toggle">
+    <button id="male-toggle" class="gender-btn active" onclick="setGender('male')">Men's Style</button>
+    <button id="female-toggle" class="gender-btn" onclick="setGender('female')">Women's Style</button>
+  </div>
+  
+  <div id="loading-container">
+    <div class="loader"></div>
+    <p>Consulting fashion AI for the perfect outfit...</p>
+  </div>
+  
+  <div id="weather-info"></div>
+  <div id="result" style="margin-top: 20px;"></div>
+  <div id="debug-info"></div>
+  
+  <div class="outfit-container">
+    <div class="outfit-image" id="outfit-image"></div>
+    <div class="outfit-items" id="outfit-items"></div>
+  </div>
+  
+  <div class="credits">
+    Images generated using Pollinations.ai. Fashion recommendations powered by AI.
+  </div>
+  
+  <script>
+    let citySuggestions = [];
+    let currentGender = "male"; // Default gender
+    let lastApiResponse = null; // Store last API response for debugging
+    
+    // Replace this with your Google Apps Script web app URL
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbxpGbQ0ya2d-jRCk80vDkt0_1FPC-o7KKLB8rkESht2ZymqxV64tEBFgrOlZt10Ylus/exec';
+    
+    // Set active gender
+    function setGender(gender) {
+      currentGender = gender;
+      
+      // Update UI
+      if (gender === "male") {
+        document.getElementById("male-toggle").classList.add("active");
+        document.getElementById("female-toggle").classList.remove("active");
+      } else {
+        document.getElementById("male-toggle").classList.remove("active");
+        document.getElementById("female-toggle").classList.add("active");
+      }
+      
+      // If there's already weather data displayed, update the outfit
+      const weatherInfo = document.getElementById("weather-info").innerText;
+      if (weatherInfo && weatherInfo.length > 0) {
+        getOutfit();
+      }
+    }
+    
+    // City suggestion functionality
+    document.getElementById("city").addEventListener("input", debounce(handleCityInput, 300));
+    
+    function debounce(func, delay) {
+      let timeout;
+      return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), delay);
+      };
+    }
+    
+    async function handleCityInput() {
+      const cityInput = document.getElementById("city").value.trim();
+      const suggestionsDiv = document.getElementById("city-suggestions");
+      
+      if (cityInput.length < 3) {
+        suggestionsDiv.style.display = "none";
+        return;
+      }
+      
+      try {
+        // Use Google Apps Script as proxy for city suggestions
+        const response = await fetch(`${scriptUrl}?action=getCitySuggestions&city=${encodeURIComponent(cityInput)}`);
+        const data = await response.json();
+        
+        if (data && data.length > 0) {
+          citySuggestions = data;
+          suggestionsDiv.innerHTML = "";
+          
+          data.forEach((city, index) => {
+            const cityElement = document.createElement("div");
+            cityElement.className = "city-suggestion";
+            cityElement.textContent = `${city.name}${city.state ? ', ' + city.state : ''}, ${city.country}`;
+            cityElement.addEventListener("click", () => selectCity(index));
+            suggestionsDiv.appendChild(cityElement);
+          });
+          
+          suggestionsDiv.style.display = "block";
+        } else {
+          suggestionsDiv.style.display = "none";
+        }
+      } catch (error) {
+        console.error("Error fetching city suggestions:", error);
+      }
+    }
+    
+    function selectCity(index) {
+      const cityData = citySuggestions[index];
+      document.getElementById("city").value = `${cityData.name}${cityData.state ? ', ' + cityData.state : ''}, ${cityData.country}`;
+      document.getElementById("city-suggestions").style.display = "none";
+    }
+    
+    // Hide suggestions when clicking outside
+    document.addEventListener("click", function(event) {
+      if (!event.target.closest("#city-container")) {
+        document.getElementById("city-suggestions").style.display = "none";
+      }
+    });
+    
+    // Add event listener for Enter key
+    document.getElementById("city").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        getOutfit();
+      }
+    });
+    
+    // Function to display debugging information
+    function displayDebugInfo(error, apiResponse) {
+      const debugDiv = document.getElementById("debug-info");
+      debugDiv.style.display = "block";
+      
+      let debugHTML = `<h3>Debug Information</h3>
+        <p>Error: ${error.message}</p>`;
+      
+      if (apiResponse) {
+        debugHTML += `<details>
+          <summary>API Response Details (click to expand)</summary>
+          <pre>${JSON.stringify(apiResponse, null, 2)}</pre>
+        </details>`;
+      }
+      
+      debugDiv.innerHTML = debugHTML;
+    }
+    
+    // Function to generate image using Pollinations.ai
+    function generateOutfitImage(prompt) {
+      // Enhance the prompt to ensure flat lay product photography style
+      const modifiedPrompt = `${prompt}, professional flat lay product photography, no persons, items arranged neatly on pure white background, high resolution catalog style, 8k, sharp focus, studio lighting`;
+      const encodedPrompt = encodeURIComponent(modifiedPrompt);
+      const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=600&height=600&nologo=true`;
+      
+      document.getElementById("outfit-image").innerHTML = `
+        <img src="${imageUrl}" alt="Generated outfit visualization">
+      `;
+    }
+    
+    // Main function to get outfit recommendations
+    async function getOutfit() {
+      const city = document.getElementById("city").value.trim();
+      if (!city) {
+        alert("Please enter a city name");
+        return;
+      }
+      
+      const weatherInfo = document.getElementById("weather-info");
+      const resultDiv = document.getElementById("result");
+      const outfitImageDiv = document.getElementById("outfit-image");
+      const outfitItemsDiv = document.getElementById("outfit-items");
+      const loadingContainer = document.getElementById("loading-container");
+      const debugDiv = document.getElementById("debug-info");
+      
+      weatherInfo.innerHTML = "";
+      resultDiv.innerHTML = "";
+      outfitImageDiv.innerHTML = "";
+      outfitItemsDiv.innerHTML = "";
+      debugDiv.style.display = "none";
+      loadingContainer.style.display = "block";
+      
+      try {
+        // Get weather data and outfit recommendation through Google Apps Script
+        const response = await fetch(`${scriptUrl}?action=getOutfit&city=${encodeURIComponent(city)}&gender=${currentGender}`);
+        const data = await response.json();
+        
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        
+        const weatherData = data.weatherData;
+        const outfitRecommendation = data.outfitRecommendation;
+        
+        // Display weather info with Fahrenheit
+        weatherInfo.innerHTML = `
+          <strong>Weather in ${weatherData.name}, ${weatherData.sys.country}:</strong>
+          <ul>
+            <li>Temperature: ${Math.round(weatherData.main.temp)}°F</li>
+            <li>Condition: ${weatherData.weather[0].main} (${weatherData.weather[0].description})</li>
+            <li>Wind: ${Math.round(weatherData.wind.speed)} mph</li>
+          </ul>
+        `;
+        
+        loadingContainer.style.display = "none";
+        resultDiv.innerHTML = `<strong>Your personalized outfit for ${weatherData.name} (${Math.round(weatherData.main.temp)}°F, ${weatherData.weather[0].main}):</strong>`;
+        
+        // Display outfit items with Amazon links
+        outfitItemsDiv.innerHTML = `
+          <div class="item">
+            <h3>SHIRT: ${outfitRecommendation.shirt.name}</h3>
+            <p>${outfitRecommendation.shirt.description}</p>
+            <a href="https://www.amazon.com/s?k=${encodeURIComponent(outfitRecommendation.shirt.name)}" target="_blank">Shop on Amazon</a>
+          </div>
+          <div class="item">
+            <h3>PANTS: ${outfitRecommendation.pants.name}</h3>
+            <p>${outfitRecommendation.pants.description}</p>
+            <a href="https://www.amazon.com/s?k=${encodeURIComponent(outfitRecommendation.pants.name)}" target="_blank">Shop on Amazon</a>
+          </div>
+          <div class="item">
+            <h3>SHOES: ${outfitRecommendation.shoes.name}</h3>
+            <p>${outfitRecommendation.shoes.description}</p>
+            <a href="https://www.amazon.com/s?k=${encodeURIComponent(outfitRecommendation.shoes.name)}" target="_blank">Shop on Amazon</a>
+          </div>
+          <div class="item">
+            <h3>ACCESSORY: ${outfitRecommendation.accessory.name}</h3>
+            <p>${outfitRecommendation.accessory.description}</p>
+            <a href="https://www.amazon.com/s?k=${encodeURIComponent(outfitRecommendation.accessory.name)}" target="_blank">Shop on Amazon</a>
+          </div>
+        `;
+        
+        // Generate the outfit image using Pollinations.ai and the prompt from Groq
+        generateOutfitImage(outfitRecommendation.imagePrompt);
+        
+      } catch (err) {
+        console.error("Error:", err);
+        loadingContainer.style.display = "none";
+        resultDiv.innerHTML = `<p class="error">Something went wrong: ${err.message}</p>
+                              <p>Check browser console for more details or click "Debug" below.</p>
+                              <button onclick="document.getElementById('debug-info').style.display='block'">Debug</button>`;
+        displayDebugInfo(err, lastApiResponse);
+      }
+    }
+  </script>
+</body>
+</html>
