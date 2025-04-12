@@ -232,8 +232,8 @@
   </div>
   
   <script>
-    // Replace with your deployed Google Apps Script URL
-    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzKEyipp02eed-KoFU1raSdqiuQ_5UCgWkbJRWhna6CwvxWrt89wDpaiYYangBd6yYAOg/exec";
+    // Replace with your Google Apps Script URL
+    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxannZo8cuda2gYuEBQcu4rWssiY5Oxy-saOhRudN95cbS93gasCc_89g-wYV8RMJYv-Q/exec";
     
     let citySuggestions = [];
     let currentGender = "male"; // Default gender
@@ -282,11 +282,18 @@
       }
       
       try {
-        // Now we call our Google Apps Script API instead of directly calling OpenWeather
+        // Call our Google Apps Script backend instead of directly calling OpenWeather
         const response = await fetch(`${GAS_API_URL}?action=getCitySuggestions&cityInput=${encodeURIComponent(cityInput)}`);
         const data = await response.json();
         
-        if (data && data.length > 0) {
+        // Handle potential error in response
+        if (data.error) {
+          console.error("API error:", data.error);
+          suggestionsDiv.style.display = "none";
+          return;
+        }
+        
+        if (data && Array.isArray(data) && data.length > 0) {
           citySuggestions = data;
           suggestionsDiv.innerHTML = "";
           
@@ -380,7 +387,7 @@
       loadingContainer.style.display = "block";
       
       try {
-        // Step 1: Get weather data from our GAS backend
+        // Step 1: Get weather data from our backend
         const weatherResponse = await fetch(GAS_API_URL, {
           method: 'POST',
           headers: {
@@ -391,6 +398,10 @@
             city: city
           })
         });
+        
+        if (!weatherResponse.ok) {
+          throw new Error(`HTTP error! Status: ${weatherResponse.status}`);
+        }
         
         const weatherData = await weatherResponse.json();
         
@@ -415,7 +426,7 @@
           </ul>
         `;
         
-        // Step 2: Get outfit recommendation from our GAS backend
+        // Step 2: Get outfit recommendation from our backend
         const outfitResponse = await fetch(GAS_API_URL, {
           method: 'POST',
           headers: {
@@ -428,7 +439,12 @@
           })
         });
         
+        if (!outfitResponse.ok) {
+          throw new Error(`HTTP error! Status: ${outfitResponse.status}`);
+        }
+        
         const outfitRecommendation = await outfitResponse.json();
+        lastApiResponse = outfitRecommendation; // Store for debugging
         
         if (outfitRecommendation.error) {
           throw new Error(outfitRecommendation.error);
@@ -461,7 +477,7 @@
           </div>
         `;
         
-        // Step 3: Generate the outfit image using Pollinations.ai and the prompt
+        // Step 3: Generate the outfit image using Pollinations.ai
         generateOutfitImage(outfitRecommendation.imagePrompt);
         
       } catch (err) {
