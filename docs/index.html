@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Slay-gent: Weather-Based Outfit Agent ☀️❄️👗</title>
+  <title> Slay-gent: Weather-Based Outfit Agent ☀️❄️👗</title>
   <style>
     body { 
       font-family: Arial, sans-serif; 
@@ -228,16 +228,16 @@
   </div>
   
   <div class="credits">
-    Images generated using Pollinations.ai. Fashion recommendations powered by AI.
+    Images generated using Pollinations.ai. Fashion recommendations powered by Groq AI.
   </div>
   
   <script>
+    // Replace this with your Google Apps Script Web App URL
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+    
     let citySuggestions = [];
     let currentGender = "male"; // Default gender
     let lastApiResponse = null; // Store last API response for debugging
-    
-    // Replace this with your Google Apps Script web app URL
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycbxpGbQ0ya2d-jRCk80vDkt0_1FPC-o7KKLB8rkESht2ZymqxV64tEBFgrOlZt10Ylus/exec';
     
     // Set active gender
     function setGender(gender) {
@@ -282,15 +282,24 @@
       }
       
       try {
-        // Use Google Apps Script as proxy for city suggestions
-        const response = await fetch(`${scriptUrl}?action=getCitySuggestions&city=${encodeURIComponent(cityInput)}`);
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'getCitySuggestions',
+            cityInput: cityInput
+          })
+        });
+        
         const data = await response.json();
         
-        if (data && data.length > 0) {
-          citySuggestions = data;
+        if (data.suggestions && data.suggestions.length > 0) {
+          citySuggestions = data.suggestions;
           suggestionsDiv.innerHTML = "";
           
-          data.forEach((city, index) => {
+          data.suggestions.forEach((city, index) => {
             const cityElement = document.createElement("div");
             cityElement.className = "city-suggestion";
             cityElement.textContent = `${city.name}${city.state ? ', ' + city.state : ''}, ${city.country}`;
@@ -380,29 +389,66 @@
       loadingContainer.style.display = "block";
       
       try {
-        // Get weather data and outfit recommendation through Google Apps Script
-        const response = await fetch(`${scriptUrl}?action=getOutfit&city=${encodeURIComponent(city)}&gender=${currentGender}`);
-        const data = await response.json();
+        // Get weather data from Apps Script
+        const weatherResponse = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'getWeather',
+            city: city
+          })
+        });
         
-        if (data.error) {
-          throw new Error(data.error);
+        const weatherResult = await weatherResponse.json();
+        
+        if (weatherResult.error) {
+          throw new Error(weatherResult.message);
         }
         
-        const weatherData = data.weatherData;
-        const outfitRecommendation = data.outfitRecommendation;
+        const weatherData = weatherResult.weatherData;
+        const temp = Math.round(weatherData.main.temp);
+        const condition = weatherData.weather[0].main;
+        const description = weatherData.weather[0].description;
+        const cityName = weatherData.name;
+        const country = weatherData.sys.country;
+        const windSpeed = Math.round(weatherData.wind.speed);
         
         // Display weather info with Fahrenheit
         weatherInfo.innerHTML = `
-          <strong>Weather in ${weatherData.name}, ${weatherData.sys.country}:</strong>
+          <strong>Weather in ${cityName}, ${country}:</strong>
           <ul>
-            <li>Temperature: ${Math.round(weatherData.main.temp)}°F</li>
-            <li>Condition: ${weatherData.weather[0].main} (${weatherData.weather[0].description})</li>
-            <li>Wind: ${Math.round(weatherData.wind.speed)} mph</li>
+            <li>Temperature: ${temp}°F</li>
+            <li>Condition: ${condition} (${description})</li>
+            <li>Wind: ${windSpeed} mph</li>
           </ul>
         `;
         
+        // Get outfit recommendation from Apps Script
+        const outfitResponse = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            action: 'getOutfitRecommendation',
+            weatherData: weatherData,
+            gender: currentGender
+          })
+        });
+        
+        const outfitResult = await outfitResponse.json();
+        
+        if (outfitResult.error) {
+          throw new Error(outfitResult.message);
+        }
+        
+        const outfitRecommendation = outfitResult.outfitRecommendation;
+        lastApiResponse = outfitResult; // Store for debugging
+        
         loadingContainer.style.display = "none";
-        resultDiv.innerHTML = `<strong>Your personalized outfit for ${weatherData.name} (${Math.round(weatherData.main.temp)}°F, ${weatherData.weather[0].main}):</strong>`;
+        resultDiv.innerHTML = `<strong>Your personalized outfit for ${cityName} (${temp}°F, ${condition}):</strong>`;
         
         // Display outfit items with Amazon links
         outfitItemsDiv.innerHTML = `
