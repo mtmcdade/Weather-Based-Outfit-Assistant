@@ -486,4 +486,50 @@
         
         lastApiResponse = outfitRecommendation; // Store for debugging
         
-        if (outfitRecommendation.erro
+        if (outfitRecommendation.error) {
+          throw new Error(outfitRecommendation.error);
+        }
+        
+        loadingContainer.style.display = "none";
+        resultDiv.innerHTML = `<strong>Your personalized outfit for ${cityName} (${temp}°F, ${condition}):</strong>`;
+        
+        // Display outfit items with Amazon links
+        outfitItemsDiv.innerHTML = `
+          <div class="item">
+            <h3>SHIRT: ${outfitRecommendation.shirt.name}</h3>
+            <p>${outfitRecommendation.shirt.description}</p>
+            <a href="https://www.amazon.com/s?k=${encodeURIComponent(outfitRecommendation.shirt.name)}" target="_blank">Shop on Amazon</a>
+          </div>
+          <div class="item">
+            <h3>PANTS: ${outfitRecommendation.pants.name}</h3>
+            <p>${outfitRecommendation.pants.description}</p>
+            <a href="https://www.amazon.com/s?k=${encodeURIComponent(outfitRecommendation.pants.name)}" target="_blank">Shop on Amazon</a>
+          </div>
+          <div class="item">
+            <h3>SHOES: ${outfitRecommendation.shoes.name}</h3>
+            <p>${outfitRecommendation.shoes.description}</p>
+            <a href="https://www.amazon.com/s?k=${encodeURIComponent(outfitRecommendation.shoes.name)}" target="_blank">Shop on Amazon</a>
+          </div>
+          <div class="item">
+            <h3>ACCESSORY: ${outfitRecommendation.accessory.name}</h3>
+            <p>${outfitRecommendation.accessory.description}</p>
+            <a href="https://www.amazon.com/s?k=${encodeURIComponent(outfitRecommendation.accessory.name)}" target="_blank">Shop on Amazon</a>
+          </div>
+        `;
+        
+        // Step 3: Generate the outfit image using Pollinations.ai
+        console.log("Generating image with prompt:", outfitRecommendation.imagePrompt);
+        generateOutfitImage(outfitRecommendation.imagePrompt);
+        
+      } catch (err) {
+        console.error("Full error details:", err);
+        loadingContainer.style.display = "none";
+        resultDiv.innerHTML = `<p class="error">Something went wrong: ${err.message}</p>
+                              <p>Check browser console for more details or click "Debug" below.</p>
+                              <button onclick="document.getElementById('debug-info').style.display='block'">Debug</button>`;
+        displayDebugInfo(err, lastApiResponse);
+      }
+    }
+  </script>
+</body>
+</html>
