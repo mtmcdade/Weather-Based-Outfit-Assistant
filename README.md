@@ -47,8 +47,8 @@ Additionally, we'll add outfit saving functionality so users can bookmark their 
 
 ### Multi-day Forecasting
 For multi-day forecasting, we plan to show outfit recommendations for the upcoming week, helping with wardrobe planning and packing for trips by suggesting versatile pieces that work across changing weather conditions
-We also
-## Responsible AI Considerations: 
+
+## 🤝 Responsible AI Considerations: 
 
 ### Bias in AI Fashion Recommendations: 
 Ensure the AI doesn't perpetuate gender, cultural, or body type stereotypes in clothing suggestions.
