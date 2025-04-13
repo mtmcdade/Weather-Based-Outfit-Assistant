@@ -4,9 +4,7 @@
 # 🤓 Authors:  
 
 Leah Pak (github.com/Leahdotcom | linkedin.com/in/leah-pak) 
-
 Quentin Phillips (github.com/QuentinPhil | linkedin.com/in/quentin-phillips) 
-
 Molly McDade (github.com/mtmcdade | linkedin.com/in/molly-mcdade)  
 
 # 📋 Project Scope: 
