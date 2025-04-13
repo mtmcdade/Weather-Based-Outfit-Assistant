@@ -26,6 +26,7 @@ Include error handling and a loading indicator
 Be designed to run directly from GitHub Pages without requiring a backend server 
 Please provide the full HTML, CSS, and JavaScript code in a single file." 
 ##  📖  Case Study:  
+![Screenshot from Article](photos/AgentSociety.png)
  The Rise and Potential of Large Language Model Based Agents: A Survey   
 ## 💡 What's Next: 
 ## 🤝 Responsible AI Considerations: 
