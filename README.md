@@ -92,8 +92,5 @@ The weather-location data Slay-gent collects creates privacy considerations. Whi
 ### Over-reliance Risk: 
 Users might develop unhealthy reliance on Slay-gent's fashion advice, diminishing their own decision-making confidence. As the research notes, people can form emotional attachments to AI systems, potentially leading to an over-dependence on AI for personal choices like clothing.
 
-### Responsible Innovation: 
-As Slay-gent evolves, especially with the planned personalization features, the team should establish ethical guidelines for development, regularly audit for biases in recommendations, and implement appropriate safeguards to address these risks proactively rather than reactively.
-
 ## 📕 Reference List:
 Xi, Zhiheng, et al. "The Rise and Potential of Large Language Model Based Agents: A Survey." arXiv, 14 Sept. 2023, arxiv.org/abs/2309.07864.
