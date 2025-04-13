@@ -77,6 +77,9 @@ The article goes further and describes "agent societies" as simulated ecosystems
  
 ## 💡 What's Next: 
 
+### Path to Agency
+Implement independent perception capabilities that monitor weather conditions without user prompting, enable autonomous decision-making for proactive outfit recommendations, and add action abilities like sending alerts or interfacing with calendars and shopping platforms. 
+
 ### Style Preferences 
 In the future, we plan to expand Slay-gent with several exciting features to enhance the user experience. For user style preferences, we'll implement a system that learns from your choices and saves your favorite styles, colors, and clothing items to provide increasingly personalized recommendations over time.
 
@@ -86,8 +89,7 @@ We're also developing a budget range filter that will let users specify their pr
 ### Saved Outfits
 Additionally, we'll add outfit saving functionality so users can bookmark their favorite recommendations for future reference. This will include options to categorize saved outfits by season, occasion, or weather conditions, making it easy to build a personal lookbook of weather-appropriate styles.
 
-### Multi-day Forecasting
-For multi-day forecasting, we plan to show outfit recommendations for the upcoming week, helping with wardrobe planning and packing for trips by suggesting versatile pieces that work across changing weather conditions
+
 
 ## 🤝 Responsible AI Considerations: 
 
