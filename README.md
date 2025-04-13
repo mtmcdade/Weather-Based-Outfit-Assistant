@@ -36,18 +36,23 @@ Please provide the full HTML, CSS, and JavaScript code in a single file."
  The Rise and Potential of Large Language Model Based Agents: A Survey   
 ## 💡 What's Next: 
 
-### 👚 Style Preferences 
+### Style Preferences 
 In the future, we plan to expand Slay-gent with several exciting features to enhance the user experience. For user style preferences, we'll implement a system that learns from your choices and saves your favorite styles, colors, and clothing items to provide increasingly personalized recommendations over time.
 
-### 💵 Budget Filter
+### Budget Filter
 We're also developing a budget range filter that will let users specify their price comfort zone, ensuring recommendations match not just the weather but also financial preferences. Our shopping suggestions will automatically adjust to show options within your selected price range.
 
-### 💾 Saved Outfits
+### Saved Outfits
 Additionally, we'll add outfit saving functionality so users can bookmark their favorite recommendations for future reference. This will include options to categorize saved outfits by season, occasion, or weather conditions, making it easy to build a personal lookbook of weather-appropriate styles.
 
-### 📆 Multi-day Forecasting
+### Multi-day Forecasting
 For multi-day forecasting, we plan to show outfit recommendations for the upcoming week, helping with wardrobe planning and packing for trips by suggesting versatile pieces that work across changing weather conditions
 We also
-## 🤝 Responsible AI Considerations: 
+## Responsible AI Considerations: 
+
+### Bias in AI Fashion Recommendations: 
+Ensure the AI doesn't perpetuate gender, cultural, or body type stereotypes in clothing suggestions.
+
+
 
 ## 📕 Reference List:
