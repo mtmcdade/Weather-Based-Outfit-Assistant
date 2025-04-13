@@ -11,6 +11,7 @@ Molly McDade (github.com/mtmcdade | linkedin.com/in/molly-mcdade)
 	This project was inspired by the website Daily Dress Me, which is a platform that depicts outfit inspiration based on a user's IP address. The main inspiration for our project was that this website has 3 key areas it could improve upon: 1) options for men's styling 2) more detailed weather information and 3) easy links to purchase clothing items shown. 
 
 	We tried to improve upon these three concepts in our design. While all three concepts were accomplished, the “style” of our outfits does not output fits as fashionable as those on Daily Dress Me. Additionally, Daily Dress Me has a cleaner visualization of the outfits that likely pulls from real website photos, rather than AI image generation. We will continue to work on the features in our model to achieve better visual and stylistic presentations in the future. However, we are satisfied that for now our website allows for more inclusive styling and an avenue to shop the look. 
+ 
 ## 🔎 Project Details: 
 
  
