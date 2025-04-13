@@ -1,5 +1,5 @@
 # Slay-gent: Weather-Based Outfit Assistant
-## 🤓 Authors:  
+## Authors:  
 Leah Pak ([GitHub](https://github.com/Leahdotcom) |  [LinkedIn](https://www.linkedin.com/in/leah-pak)) 
 
 Quentin Phillips ([GitHub](https://github.com/QuentinPhil) | [LinkedIn](https://www.linkedin.com/in/quentin-phillips-01b95215/)) 
