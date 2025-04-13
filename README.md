@@ -69,13 +69,11 @@ Please provide the full HTML, CSS, and JavaScript code in a single file."
 ![Screenshot from Article](photos/AgentSociety.png)
 The article "The Rise and Potential of Large Language Model Based Agents" presents a framework for understanding AI agents as entities that can perceive their environment, make decisions, and take actions - consisting of three core components: brain, perception, and action capabilities.
 
-Slay-gent doesn't qualify as a true AI agent despite its capabilities. It lacks independent perception (requiring user input rather than sensing its environment), cannot take actions beyond displaying recommendations, and operates reactively rather than with genuine autonomy. These limitations make it more accurately classified as an intelligent recommendation system than an agent that can continuously sense, decide, and act.
+By this definition, Slay-gent doesn't really qualify as a true AI agent despite its capabilities. It lacks independent perception (requiring user input rather than sensing its environment), cannot take actions beyond displaying recommendations, and operates reactively rather than with genuine autonomy. These limitations make it more accurately classified as an intelligent recommendation system than an agent.
 
 Despite this, we did interact with an agent (Claude) while vibe coding this project Claude. Claude functioned as a legitimate AI agent by perceiving our requirements, independently reasoning about solutions, and taking concrete actions through code generation and problem-solving. 
 
-The article describes "agent societies" as simulated ecosystems where multiple LLM-based agents interact with each other and humans. These societies mimic real-world social dynamics, with AI agents taking on different roles, collaborating, competing, and developing emergent social behaviors.
-
-These simulated societies have valuable applications in research and industry, but come with significant ethical risks: they could generate harmful social phenomena (discrimination, bullying), perpetuate stereotypes from biased training data, create privacy concerns, and lead to unhealthy human attachments to agents.
+The article goes further and describes "agent societies" as simulated ecosystems where multiple LLM-based agents interact with each other and humans (as pictured above). These societies mimic real-world social dynamics, with AI agents taking on different roles, collaborating, competing, and developing emergent social behaviors. These simulated societies have valuable applications in research and industry, but come with significant ethical risks: they could generate harmful social phenomena (discrimination, bullying), perpetuate stereotypes from biased training data, create privacy concerns, and lead to unhealthy human attachments to agents.
  
 ## 💡 What's Next: 
 
