@@ -73,7 +73,7 @@ By this definition, Slay-gent doesn't really qualify as a true AI agent despite 
 
 Despite this, we did interact with an agent (Claude) while vibe coding this project Claude. Claude functioned as a legitimate AI agent by perceiving our requirements, independently reasoning about solutions, and taking concrete actions through code generation and problem-solving. 
 
-The article goes further and describes "agent societies" as simulated ecosystems where multiple LLM-based agents interact with each other and humans (as pictured above). These societies mimic real-world social dynamics, with AI agents taking on different roles, collaborating, competing, and developing emergent social behaviors. These simulated societies have valuable applications in research and industry, but come with significant ethical risks: they could generate harmful social phenomena (discrimination, bullying), perpetuate stereotypes from biased training data, create privacy concerns, and lead to unhealthy human attachments to agents.
+The article goes further and describes "agent societies" as simulated ecosystems where multiple LLM-based agents interact with each other and humans (as pictured above). These societies mimic real-world social dynamics, with AI agents taking on different roles, collaborating, competing, and developing emergent social behaviors. 
  
 ## 💡 What's Next: 
 
