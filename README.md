@@ -1,4 +1,4 @@
-# Slay-gent: Weather-Based Outfit Assistant
+## Slay-gent: Weather-Based Outfit Assistant
 ![Screenshot from Slay-Gent in action](path/to/image.jpg)
 
 # 🤓 Authors:  
