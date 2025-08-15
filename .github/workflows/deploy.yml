@@ -16,8 +16,8 @@ jobs:
     - name: Replace API keys in HTML
       run: |
         # Replace the secret placeholders with actual values in the docs folder
-        sed -i 's/\${{ secrets.WEATHER_API }}/"${{ secrets.WEATHER_API }}"/g' docs/*.html
-        sed -i 's/\${{ secrets.GROQ_API }}/"${{ secrets.GROQ_API }}"/g' docs/*.html
+        sed -i 's|\${{ secrets.WEATHER_API }}|"${{ secrets.WEATHER_API }}"|g' docs/*.html
+        sed -i 's|\${{ secrets.GROQ_API }}|"${{ secrets.GROQ_API }}"|g' docs/*.html
         
         # Verify the replacement worked (optional)
         echo "Checking if replacements were made..."
