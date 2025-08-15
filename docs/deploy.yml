@@ -1,0 +1,31 @@
+name: Deploy Weather App
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Replace API keys in HTML
+      run: |
+        # Replace the secret placeholders with actual values
+        sed -i 's/\${{ secrets\.WEATHER_API }}/"${{ secrets.WEATHER_API }}"/g' index.html
+        sed -i 's/\${{ secrets\.GROQ_API }}/"${{ secrets.GROQ_API }}"/g' index.html
+        
+        # Verify the replacement worked (optional)
+        echo "Checking if replacements were made..."
+        grep -n "secrets\." index.html || echo "All secrets replaced successfully"
+    
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
+        publish_branch: gh-pages
